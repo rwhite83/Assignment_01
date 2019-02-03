@@ -1,17 +1,40 @@
 #include <iostream>
+#include <fstream>
 #include "Matrix.cpp"
+#include "ConnectivityMatrix.cpp"
+#include "ConnectivityCalculations.cpp"
 
 int main() {
 
-    vector<double> inputVectorArray{3, 4, 6, 7, 7, -4, 4, 9, 7};
+    vector<double> inputVectorArray;
 
-    Matrix one(3);
+    ifstream in("connectivity.txt");
+
+    if (!in) {
+        cout << "file not found" << endl;
+    }
+    else {
+        int value;
+        while (in >> value) {
+            inputVectorArray.push_back(value);
+        }
+    }
+
     Matrix two(inputVectorArray);
-    Matrix three(inputVectorArray);
 
-    one = two * three * three * three;
+    //cout << two;
 
-    cout << one;
+    findImportance(two);
+
+    cout << two;
+
+    assignRandomness(two);
+
+    cout << two;
+
+    markovProcess(two);
+
+    cout << two;
 
     return 0;
 }

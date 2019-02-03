@@ -11,6 +11,7 @@ class Matrix {
 
 public:
 
+    //member variables
     vector<vector<double>> vect;
 
     //constructors

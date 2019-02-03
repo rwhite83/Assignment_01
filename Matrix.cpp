@@ -10,6 +10,7 @@
 using namespace std;
 //using namespace matrix;
 
+//constant expressino for default matrix size
 constexpr int defaultMatrixSize = 1;
 
 //default constructor
@@ -162,7 +163,7 @@ Matrix::~Matrix() {
 ostream &operator<<(ostream &os, Matrix &mtx) {
     for (int i = 0; i < mtx.vect.size(); i++) {
         for (int j = 0; j < mtx.vect[i].size(); j++) {
-            os << fixed << setprecision(1) << mtx.vect[i][j] << " ";
+            os << fixed << setprecision(4) << mtx.vect[i][j] << " ";
         }
         os << "\n" << endl;
     }
