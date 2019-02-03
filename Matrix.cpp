@@ -5,13 +5,12 @@
 #include "Matrix.hpp"
 #include <math.h>
 #include <iomanip>
+#include <sstream>
 
 using namespace std;
 //using namespace matrix;
 
 constexpr int defaultMatrixSize = 1;
-
-vector<vector<double>> vect;
 
 //default constructor
 Matrix::Matrix() {
@@ -116,8 +115,9 @@ Matrix::Matrix(vector<double>
     }
 }
 
-void Matrix::set_value(int x, int y, double value){
-    if (x < 0 || y < 0)  {
+//sets value of a particular vector position
+void Matrix::set_value(int x, int y, double value) {
+    if (x < 0 || y < 0) {
         cout << "matrix paramaters must be greater than or equal to zero" << endl;
     }
     if (x >= vect.size() || y >= vect[0].size()) {
@@ -126,7 +126,29 @@ void Matrix::set_value(int x, int y, double value){
     vect[x][y] = value;
 }
 
-void Matrix::printMatrix() {
+//returns value of a particular vector position
+double Matrix::get_value(int x, int y) {
+    if (x >= vect.size() || y >= vect[0].size()) {
+        cout << "attempted location out of bounds of target matrix" << endl;
+    }
+    return vect[x][y];
+}
+
+//sets all matrix values to zero
+void Matrix::clear() {
+    for (int i = 0; i < vect.size(); i++) {
+        for (int j = 0; j < vect[i].size(); j++) {
+            vect[i][j] = 0;
+        }
+    }
+}
+
+//overloaded destructor
+Matrix::~Matrix() {
+    cout << "matrix destroyed" << endl;
+}
+
+/*void Matrix::printMatrix() {
     for (int i = 0; i < vect.size(); i++) {
         for (int j = 0; j < vect[i].size(); j++) {
             cout << fixed << setprecision(1) << vect[i][j] << " ";
@@ -134,6 +156,169 @@ void Matrix::printMatrix() {
         cout << "\n" << endl;
     }
     cout << endl;
+}*/
+
+//overloaded insertion operator
+ostream &operator<<(ostream &os, Matrix &mtx) {
+    for (int i = 0; i < mtx.vect.size(); i++) {
+        for (int j = 0; j < mtx.vect[i].size(); j++) {
+            os << fixed << setprecision(1) << mtx.vect[i][j] << " ";
+        }
+        os << "\n" << endl;
+    }
+    os << endl;
+    return os;
 }
 
+//overloaded not equals operator
+bool operator!=(Matrix& LHSmtx, Matrix& RHSmtx) {
+    bool isNotEqual = false;
+    for (int i = 0; i < LHSmtx.vect.size(); i++) {
+        for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.01) {
+                isNotEqual = true;
+                return isNotEqual;
+            }
+        }
+    }
+}
 
+//overloaded is equal to operator
+bool operator==(Matrix& LHSmtx, Matrix& RHSmtx) {
+    bool isEqual = true;
+    for (int i = 0; i < RHSmtx.vect.size(); i++) {
+        for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.01) {
+                isEqual = false;
+                return isEqual;
+            }
+        }
+    }
+    return isEqual;
+}
+
+//overloaded prefix incrementer operator
+Matrix& Matrix::operator++() {
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            ++this->vect[i][j];
+        }
+    }
+    return *this;
+}
+
+//overloaded postfix incrementer operator
+Matrix& Matrix::operator++(int) {
+    Matrix tempMatrix(*this);
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            this->vect[i][j]++;
+        }
+    }
+    return tempMatrix;
+}
+
+//overloaded prefix decrementer operator
+Matrix& Matrix::operator--() {
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            --this->vect[i][j];
+        }
+    }
+    return *this;
+}
+
+//overloaded postfix decrementer operator
+Matrix& Matrix::operator--(int) {
+    Matrix tempMatrix(*this);
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            this->vect[i][j]--;
+        }
+    }
+    return tempMatrix;
+}
+
+//helper swap function
+void mySwap(Matrix &LHSmtx, Matrix RHSmtx) {
+    using std::swap;
+    swap(LHSmtx.vect, RHSmtx.vect);
+}
+
+//overloaded equals operator
+Matrix& Matrix::operator=(Matrix &RHSmtx) {
+    mySwap(*this, RHSmtx);
+    return *this;
+}
+
+//overloaded addition operator
+Matrix& operator+(Matrix &LHSmtx, Matrix &RHSmtx) {
+    if (RHSmtx.vect.size() != LHSmtx.vect.size() || RHSmtx.vect[0].size() != LHSmtx.vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    } else {
+        for (int i = 0; i < LHSmtx.vect.size(); i++) {
+            for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+                LHSmtx.vect[i][j] += RHSmtx.vect[i][j];
+            }
+        }
+    }
+    return LHSmtx;
+}
+
+//overloaded plus equals operator
+Matrix& Matrix::operator+=(Matrix& RHSmtx) {
+    if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    } else {
+        *this = RHSmtx + *this;
+    }
+    return *this;
+}
+
+//overloaded minus operator
+Matrix& operator-(Matrix &LHSmtx, Matrix &RHSmtx) {
+    if (RHSmtx.vect.size() != LHSmtx.vect.size() || RHSmtx.vect[0].size() != LHSmtx.vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    } else {
+        for (int i = 0; i < LHSmtx.vect.size(); i++) {
+            for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+                LHSmtx.vect[i][j] -= RHSmtx.vect[i][j];
+            }
+        }
+    }
+    return LHSmtx;
+}
+
+//overloaded minus equals operator
+Matrix& Matrix::operator-=(Matrix& RHSmtx) {
+    if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    } else {
+        *this = *this - RHSmtx;
+    }
+    return *this;
+}
+
+//overloaded multiply operator
+Matrix& operator*(Matrix &LHSmtx, Matrix &RHSmtx) {
+    if (RHSmtx.vect.size() != LHSmtx.vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    } else {
+        for (int i = 0; i < LHSmtx.vect.size(); i++) {
+            for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+                LHSmtx.vect[i][j] *= RHSmtx.vect[i][j];
+            }
+        }
+    }
+    return LHSmtx;
+}
+
+//overloaded times equal operator
+Matrix& Matrix::operator*=(Matrix& RHSmtx) {
+    if (RHSmtx.vect.size() != this->vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    } else {
+        *this = (*this) * RHSmtx;
+    }
+    return *this;
+}
