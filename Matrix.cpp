@@ -11,8 +11,6 @@ using namespace std;
 
 constexpr int defaultMatrixSize = 1;
 
-vector<vector<double>> vect;
-
 //default constructor
 Matrix::Matrix() {
 
@@ -135,12 +133,18 @@ double Matrix::get_value(int x, int y) {
     return vect[x][y];
 }
 
+//sets all matrix values to zero
 void Matrix::clear() {
     for (int i = 0; i < vect.size(); i++) {
         for (int j = 0; j < vect[i].size(); j++) {
             vect[i][j] = 0;
         }
     }
+}
+
+//overloaded destructor
+Matrix::~Matrix() {
+    cout << "matrix destroyed" << endl;
 }
 
 void Matrix::printMatrix() {
@@ -152,5 +156,17 @@ void Matrix::printMatrix() {
     }
     cout << endl;
 }
+/*
+ostream& operator<<(ostream& os, const Matrix& mtx) {
+    for (int i = 0; i < mtx->vect.size(); i++) {
+        for (int j = 0; j < vect[i].size(); j++) {
+            cout << fixed << setprecision(1) << vect[i][j] << " ";
+        }
+        cout << "\n" << endl;
+    }
+    cout << endl;*/
+
+
+
 
 

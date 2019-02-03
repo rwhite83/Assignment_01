@@ -11,20 +11,22 @@ class Matrix {
 
 public:
 
+    vector<vector<double>> vect;
+
+    //constructors
     Matrix();
-
-    Matrix(int n);
-
-    Matrix(int x, int y);
-
+    Matrix(int);
+    Matrix(int, int);
     Matrix(vector<double> thisVectorArray);
 
+    //member functions
     void printMatrix();
-
-    void set_value(int x, int y, double value);
-
-    double get_value(int x, int y);
-
+    void set_value(int, int, double);
+    double get_value(int, int);
     void clear();
+
+    //overloads
+    ~Matrix();
+    friend ostream& operator<<(ostream&, Matrix&);
 
 };
