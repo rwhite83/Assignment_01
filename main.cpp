@@ -17,17 +17,25 @@ int main() {
     vector<double> inputVectorArray{3, 4, 6, 7, 7, 4, 4, 9, 7};
 
     //matrix initialization a vector array as its parameter
-    Matrix matrixVectorArrayInput(inputVectorArray);
+    Matrix *matrixVectorArrayInput = new Matrix(inputVectorArray);
 
     //printing out the matrices for checking
     //matrixZeroInput.printMatrix();
     //matrixSingleInput.printMatrix();
     //matrixDoubleInput.printMatrix();
-    matrixVectorArrayInput.printMatrix();
+    matrixVectorArrayInput->printMatrix();
 
-    matrixVectorArrayInput.set_value(1, 1, 500);
+    // sets value at target position
+    matrixVectorArrayInput->set_value(1, 1, 500);
 
-    matrixVectorArrayInput.printMatrix();
+    //extracts value at target position
+    matrixVectorArrayInput->printMatrix();
+
+    cout << matrixVectorArrayInput->get_value(1, 1) << "\n\n" << endl ;
+
+    matrixVectorArrayInput->clear();
+
+    matrixVectorArrayInput->printMatrix();
 
     return 0;
 }

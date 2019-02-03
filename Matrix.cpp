@@ -116,6 +116,7 @@ Matrix::Matrix(vector<double>
     }
 }
 
+//sets value of a particular vector position
 void Matrix::set_value(int x, int y, double value){
     if (x < 0 || y < 0)  {
         cout << "matrix paramaters must be greater than or equal to zero" << endl;
@@ -124,6 +125,22 @@ void Matrix::set_value(int x, int y, double value){
         cout << "attempted location out of bounds of target matrix" << endl;
     }
     vect[x][y] = value;
+}
+
+//returns value of a particular vector position
+double Matrix::get_value(int x, int y) {
+    if (x >= vect.size() || y >= vect[0].size()) {
+        cout << "attempted location out of bounds of target matrix" << endl;
+    }
+    return vect[x][y];
+}
+
+void Matrix::clear() {
+    for (int i = 0; i < vect.size(); i++) {
+        for (int j = 0; j < vect[i].size(); j++) {
+            vect[i][j] = 0;
+        }
+    }
 }
 
 void Matrix::printMatrix() {

@@ -23,4 +23,8 @@ public:
 
     void set_value(int x, int y, double value);
 
+    double get_value(int x, int y);
+
+    void clear();
+
 };
