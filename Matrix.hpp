@@ -28,5 +28,14 @@ public:
     //overloads
     ~Matrix();
     friend ostream& operator<<(ostream&, Matrix&);
+    friend bool operator==(Matrix& RHSmtx, Matrix& LHSmtx);
+    friend bool operator!=(Matrix& RHSmtx, Matrix& LHSmtx);
+    Matrix& operator++();
+    Matrix& operator++(int);
+    Matrix& operator--();
+    Matrix& operator--(int);
+    friend void mySwap(Matrix& LHSmtx, Matrix RHSmtx);
+    Matrix& operator=(Matrix&);
+    friend Matrix& operator+(Matrix& LHSmtx, Matrix& RHSmtx);
 
 };

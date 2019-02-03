@@ -5,6 +5,7 @@
 #include "Matrix.hpp"
 #include <math.h>
 #include <iomanip>
+#include <sstream>
 
 using namespace std;
 //using namespace matrix;
@@ -115,8 +116,8 @@ Matrix::Matrix(vector<double>
 }
 
 //sets value of a particular vector position
-void Matrix::set_value(int x, int y, double value){
-    if (x < 0 || y < 0)  {
+void Matrix::set_value(int x, int y, double value) {
+    if (x < 0 || y < 0) {
         cout << "matrix paramaters must be greater than or equal to zero" << endl;
     }
     if (x >= vect.size() || y >= vect[0].size()) {
@@ -147,7 +148,7 @@ Matrix::~Matrix() {
     cout << "matrix destroyed" << endl;
 }
 
-void Matrix::printMatrix() {
+/*void Matrix::printMatrix() {
     for (int i = 0; i < vect.size(); i++) {
         for (int j = 0; j < vect[i].size(); j++) {
             cout << fixed << setprecision(1) << vect[i][j] << " ";
@@ -155,18 +156,121 @@ void Matrix::printMatrix() {
         cout << "\n" << endl;
     }
     cout << endl;
-}
-/*
-ostream& operator<<(ostream& os, const Matrix& mtx) {
-    for (int i = 0; i < mtx->vect.size(); i++) {
-        for (int j = 0; j < vect[i].size(); j++) {
-            cout << fixed << setprecision(1) << vect[i][j] << " ";
+}*/
+
+//overloaded insertion operator
+ostream &operator<<(ostream &os, Matrix &mtx) {
+    for (int i = 0; i < mtx.vect.size(); i++) {
+        for (int j = 0; j < mtx.vect[i].size(); j++) {
+            os << fixed << setprecision(1) << mtx.vect[i][j] << " ";
         }
-        cout << "\n" << endl;
+        os << "\n" << endl;
     }
-    cout << endl;*/
+    os << endl;
+    return os;
+}
 
 
+bool operator!=(Matrix &LHSmtx, Matrix &RHSmtx) {
+    bool isNotEqual = false;
+    for (int i = 0; i < LHSmtx.vect.size(); i++) {
+        for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.01) {
+                isNotEqual = true;
+                return isNotEqual;
+            }
+        }
+    }
+}
+
+bool operator==(Matrix &LHSmtx, Matrix &RHSmtx) {
+    bool isEqual = true;
+    for (int i = 0; i < RHSmtx.vect.size(); i++) {
+        for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.01) {
+                isEqual = false;
+                return isEqual;
+            }
+        }
+    }
+    return isEqual;
+}
+
+Matrix& Matrix::operator++() {
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            ++this->vect[i][j];
+        }
+    }
+    return *this;
+}
+
+Matrix& Matrix::operator++(int) {
+    Matrix tempMatrix(*this);
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            this->vect[i][j]++;
+        }
+    }
+    return tempMatrix;
+}
+
+Matrix& Matrix::operator--() {
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            --this->vect[i][j];
+        }
+    }
+    return *this;
+}
+
+Matrix& Matrix::operator--(int) {
+    Matrix tempMatrix(*this);
+    for (int i = 0; i < this->vect.size(); i++) {
+        for (int j = 0; j < this->vect[i].size(); j++) {
+            this->vect[i][j]--;
+        }
+    }
+    return tempMatrix;
+}
+
+void mySwap(Matrix& LHSmtx, Matrix RHSmtx) {
+    using std::swap;
+    swap(LHSmtx.vect, RHSmtx.vect);
+}
+
+Matrix& Matrix::operator=(Matrix& RHSmtx) {
+    mySwap(*this, RHSmtx);
+    return *this;
+}
+
+Matrix& operator+(Matrix& LHSmtx, Matrix& RHSmtx) {
+    if(RHSmtx.vect.size() != LHSmtx.vect.size() || RHSmtx.vect[0].size() != LHSmtx.vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    }
+    else {
+        for (int i = 0; i < LHSmtx.vect.size(); i++) {
+            for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+                LHSmtx.vect[i][j] += LHSmtx.vect[i][j];
+            }
+        }
+    }
+    return LHSmtx;
+}
+
+Matrix& operator+(Matrix& LHSmtx, Matrix& RHSmtx) {
+    if(RHSmtx.vect.size() != LHSmtx.vect.size() || RHSmtx.vect[0].size() != LHSmtx.vect[0].size()) {
+        cout << "cannot add, matrices not equivalent" << endl;
+    }
+    else {
+        for (int i = 0; i < LHSmtx.vect.size(); i++) {
+            for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
+                LHSmtx.vect[i][j] += LHSmtx.vect[i][j];
+            }
+        }
+    }
+    return LHSmtx;
+}
 
 
 
