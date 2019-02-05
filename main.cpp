@@ -6,11 +6,23 @@
 
 int main() {
 
-    vector<double> inputVectorArray;
+    vector<double> inputVectorArray1{1,2,3,4};
+    vector<double> inputVectorArray2{7,8,9,10};
 
-    ifstream in("connectivity.txt");
+    Matrix one(inputVectorArray1);
 
-    if (!in) {
+    Matrix two(inputVectorArray2);
+    Matrix three(2,2);
+
+    cout << one << two << three << endl;
+
+    one *= two;
+
+    cout << one << endl;
+
+    //ifstream in("connectivity.txt");
+
+/*    if (!in) {
         cout << "file not found" << endl;
     }
     else {
@@ -20,11 +32,11 @@ int main() {
         }
     }
 
-    Matrix two(inputVectorArray);
+    ConnectivityMatrix two(inputVectorArray);*/
 
     //cout << two;
 
-    findImportance(two);
+/*    findImportance(two);
 
     cout << two;
 
@@ -34,7 +46,7 @@ int main() {
 
     markovProcess(two);
 
-    cout << two;
+    cout << two;*/
 
     return 0;
 }

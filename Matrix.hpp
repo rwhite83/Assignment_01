@@ -28,20 +28,21 @@ public:
 
     //overloads
     ~Matrix();
-    friend ostream& operator<<(ostream&, Matrix&);
-    friend bool operator==(Matrix&, Matrix&);
-    friend bool operator!=(Matrix&, Matrix&);
+    friend ostream& operator<<(ostream&, const Matrix&);
+    friend bool operator==(const Matrix&, const Matrix&);
+    friend bool operator!=(const Matrix&, const Matrix&);
     Matrix& operator++();
-    Matrix& operator++(int);
+    //Matrix Matrix::operator++(int) {
+    Matrix operator++(int);
     Matrix& operator--();
-    Matrix& operator--(int);
+    Matrix operator--(int);
     friend void mySwap(Matrix&, Matrix);
     Matrix& operator=(Matrix&);
-    friend Matrix& operator+(Matrix&, Matrix&);
-    friend Matrix& operator-(Matrix&, Matrix&);
-    Matrix& operator+=(Matrix&);
-    Matrix& operator-=(Matrix&);
-    friend Matrix& operator*(Matrix&, Matrix&);
-    Matrix& operator*=(Matrix&);
+    Matrix& operator+(const Matrix&);
+    Matrix& operator-(const Matrix&);
+    Matrix& operator+=(const Matrix&);
+    Matrix& operator-=(const Matrix&);
+    Matrix& operator*(const Matrix&);
+    Matrix& operator*=(const Matrix&);
 
 };

@@ -47,7 +47,19 @@ Matrix &assignRandomness(Matrix &mtx) {
     }
 }
 
-Matrix &markovProcess(Matrix &mtx) {
+/*Matrix &markovProcess(Matrix &mtx) {
+
+    Matrix mtxRank(mtx.vect[0].size(),1);
+    for (int i = 0; i < mtx.vect[0].size(); i++) {
+        mtxRank.vect[i][0] = (double) 1;
+    }
+
+    cout << mtxRank << endl;
+
+    //while ()
+    mtxRank = mtx * mtxRank;*/
+
+    /*
     vector<double> M, N{1, 1, 1, 1};
     while (M != N) {
         for (int i = 0; i < mtx.vect.size(); i++) {
@@ -62,5 +74,5 @@ Matrix &markovProcess(Matrix &mtx) {
             N[k] = wubbs;
             cout << N[k] << endl;
         }
-    }
-}
+    }*/
+//}
