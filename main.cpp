@@ -6,11 +6,8 @@
 
 int main() {
 
-    vector<double> inputVectorArray2{4,3,2,3,4};
+    vector<double> input_vector_array{};
 
-    matrix matrix1(inputVectorArray2);
-
-    vector<double> inputVectorArray{};
     try {
         ifstream in("connectivity.txt");
         if (!in) {
@@ -18,7 +15,7 @@ int main() {
         } else {
             int value;
             while (in >> value) {
-                inputVectorArray.push_back(value);
+                input_vector_array.push_back(value);
             }
         }
     }
@@ -27,35 +24,7 @@ int main() {
         throw;
     }
 
-    matrix one(inputVectorArray);
-
-    cout << "base matrix: " << endl << one << endl;
-
-    findImportance(one);
-
-    matrix two = one;
-
-    cout << "find importance matrix: " << endl << two << endl;
-
-    assignRandomness(two);
-
-    matrix three = two;
-
-    cout << "assign randomness matrix: " << endl << three << endl;
-
-    markovProcess(three);
-
-    matrix four = three;
-
-    cout << endl << endl;
-
-    cout << "markov process matrix: " << endl << four << endl;
-
-    scaledRank(four);
-
-    matrix five = four;
-
-    cout << "scaled rank matrix: " << endl << five << endl;
+    conduct_ranking(input_vector_array);
 
     return 0;
 }

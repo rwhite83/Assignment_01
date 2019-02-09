@@ -18,10 +18,10 @@ public:
     matrix();
     matrix(int);
     matrix(int, int);
-    matrix(vector<double> thisVectorArray);
+    matrix(vector<double> this_vector_array);
 
     //member functions
-    void printMatrix();
+    void print_matrix();
     void set_value(int, int, double);
     double get_value(int, int);
     void clear();

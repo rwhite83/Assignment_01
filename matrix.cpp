@@ -97,11 +97,11 @@ matrix::matrix(int x, int y) {
 }
 
 //vector input constructor
-matrix::matrix(vector<double> thisVectorArray) {
+matrix::matrix(vector<double> this_vector_array) {
 
     try {
         //variable holding size of array
-        int array_size = thisVectorArray.size();
+        int array_size = this_vector_array.size();
         //variable holding square root of array
         int matrix_index = sqrt(array_size);
 
@@ -114,14 +114,14 @@ matrix::matrix(vector<double> thisVectorArray) {
         // appropriately resizing one dimension of the 2D vector
         vect.resize(matrix_index);
 
-        // incrementer for iterating through the thisVectorArray vector
+        // incrementer for iterating through the this_vector_array vector
         int v = 0;
 
         // loop for populating 2D vector
         for (int i = 0; i < matrix_index; i++) {
             vect[i].resize(matrix_index);
             for (int j = 0; j < matrix_index; j++) {
-                vect[i][j] = thisVectorArray[v];
+                vect[i][j] = this_vector_array[v];
                 v++;
             }
         }
@@ -134,25 +134,40 @@ matrix::matrix(vector<double> thisVectorArray) {
 
 //sets value of a particular vector position
 void matrix::set_value(int x, int y, double value) {
-    if (x < 0 || y < 0) {
-        cout << "matrix paramaters must be greater than or equal to zero" << endl;
+
+    try {
+        if (x < 0 || y < 0) {
+            throw "matrix paramaters must be greater than or equal to zero";
+        }
+        if (x >= vect.size() || y >= vect[0].size()) {
+            throw "attempted location out of bounds of target matrix";
+        }
+        vect[x][y] = value;
     }
-    if (x >= vect.size() || y >= vect[0].size()) {
-        cout << "attempted location out of bounds of target matrix" << endl;
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
     }
-    vect[x][y] = value;
 }
 
 //returns value of a particular vector position
 double matrix::get_value(int x, int y) {
-    if (x >= vect.size() || y >= vect[0].size()) {
-        cout << "attempted location out of bounds of target matrix" << endl;
+
+    try {
+        if (x >= vect.size() || y >= vect[0].size()) {
+            throw "attempted location out of bounds of target matrix";
+        }
+        return vect[x][y];
     }
-    return vect[x][y];
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
 }
 
 //sets all matrix values to zero
 void matrix::clear() {
+
     for (int i = 0; i < vect.size(); i++) {
         for (int j = 0; j < vect[i].size(); j++) {
             vect[i][j] = 0;
@@ -162,50 +177,58 @@ void matrix::clear() {
 
 //overloaded destructor
 matrix::~matrix() {
+
+    /*
+     * excluded for clean output
     cout << "matrix destroyed" << endl;
+     */
 }
 
 //overloaded insertion operator
 ostream &operator<<(ostream &os, matrix &mtx) {
+
     for (int i = 0; i < mtx.vect.size(); i++) {
         for (int j = 0; j < mtx.vect[i].size(); j++) {
             os << fixed << setprecision(4) << mtx.vect[i][j] << " ";
         }
-        os << "\n" << endl;
+        os << endl;
     }
     os << endl;
     return os;
 }
 
 //overloaded not equals operator
-bool operator!=(matrix &LHSmtx, matrix &RHSmtx) {
-    bool isNotEqual = false;
-    for (int i = 0; i < LHSmtx.vect.size(); i++) {
-        for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
-            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.0001) {
-                isNotEqual = true;
-                return isNotEqual;
+bool operator!=(matrix &lhs_mtx, matrix &rhs_mtx) {
+
+    bool is_not_equal = false;
+    for (int i = 0; i < lhs_mtx.vect.size(); i++) {
+        for (int j = 0; j < lhs_mtx.vect[i].size(); j++) {
+            if (abs((lhs_mtx.vect[i][j] - rhs_mtx.vect[i][j]) / rhs_mtx.vect[i][j]) > 0.0001) {
+                is_not_equal = true;
+                return is_not_equal;
             }
         }
     }
 }
 
 //overloaded is equal to operator
-bool operator==(matrix &LHSmtx, matrix &RHSmtx) {
-    bool isEqual = true;
-    for (int i = 0; i < RHSmtx.vect.size(); i++) {
-        for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
-            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.01) {
-                isEqual = false;
-                return isEqual;
+bool operator==(matrix &lhs_mtx, matrix &rhs_mtx) {
+
+    bool is_equal = true;
+    for (int i = 0; i < rhs_mtx.vect.size(); i++) {
+        for (int j = 0; j < lhs_mtx.vect[i].size(); j++) {
+            if (abs((lhs_mtx.vect[i][j] - rhs_mtx.vect[i][j]) / rhs_mtx.vect[i][j]) > 0.01) {
+                is_equal = false;
+                return is_equal;
             }
         }
     }
-    return isEqual;
+    return is_equal;
 }
 
 //overloaded prefix incrementer operator
 matrix &matrix::operator++() {
+
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             ++this->vect[i][j];
@@ -216,17 +239,19 @@ matrix &matrix::operator++() {
 
 //overloaded postfix incrementer operator
 matrix matrix::operator++(int) {
-    matrix tempMatrix(*this);
+
+    matrix temp_matrix(*this);
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             this->vect[i][j]++;
         }
     }
-    return tempMatrix;
+    return temp_matrix;
 }
 
 //overloaded prefix decrementer operator
 matrix &matrix::operator--() {
+
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             --this->vect[i][j];
@@ -237,98 +262,134 @@ matrix &matrix::operator--() {
 
 //overloaded postfix decrementer operator
 matrix matrix::operator--(int) {
-    matrix tempMatrix(*this);
+
+    matrix temp_matrix(*this);
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             this->vect[i][j]--;
         }
     }
-    return tempMatrix;
+    return temp_matrix;
 }
 
 //helper swap function
-void mySwap(matrix &LHSmtx, matrix RHSmtx) {
+void mySwap(matrix &lhs_mtx, matrix rhs_mtx) {
+
     using std::swap;
-    swap(LHSmtx.vect, RHSmtx.vect);
+    swap(lhs_mtx.vect, rhs_mtx.vect);
 }
 
 //overloaded assignment operator
-matrix &matrix::operator=(const matrix &RHSmtx) {
-    mySwap(*this, RHSmtx);
+matrix &matrix::operator=(const matrix &rhs_mtx) {
+
+    mySwap(*this, rhs_mtx);
     return *this;
 }
 
 //overloaded addition operator
-matrix &matrix::operator+(const matrix &RHSmtx) {
-    if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
-        cout << "cannot add, matrices not equivalent" << endl;
-    } else {
-        for (int i = 0; i < this->vect.size(); i++) {
-            for (int j = 0; j < this->vect[i].size(); j++) {
-                this->vect[i][j] += RHSmtx.vect[i][j];
-            }
-        }
-    }
-    return *this;
-}
+matrix &matrix::operator+(const matrix &rhs_mtx) {
 
-//overloaded plus equals operator
-matrix &matrix::operator+=(const matrix &RHSmtx) {
-    if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
-        cout << "cannot add, matrices not equivalent" << endl;
-    } else {
-        *this = *this + RHSmtx;
-    }
-    return *this;
-}
-
-//overloaded minus operator
-matrix &matrix::operator-(const matrix &RHSmtx) {
-    if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
-        cout << "cannot add, matrices not equivalent" << endl;
-    } else {
-        for (int i = 0; i < this->vect.size(); i++) {
-            for (int j = 0; j < this->vect[i].size(); j++) {
-                this->vect[i][j] -= RHSmtx.vect[i][j];
-            }
-        }
-    }
-    return *this;
-}
-
-//overloaded minus equals operator
-matrix &matrix::operator-=(const matrix &RHSmtx) {
-    if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
-        cout << "cannot add, matrices not equivalent" << endl;
-    } else {
-        *this = *this - RHSmtx;
-    }
-    return *this;
-}
-
-
-matrix &matrix::operator*=(const matrix &RHSmtx) {
-
-    if (this->vect[0].size() != RHSmtx.vect.size()) {
-        cout << "cannot multiply these matrices" << endl;
-    } else {
-        matrix mtx3(this->vect.size(), RHSmtx.vect[0].size());
-        for (int i = 0; i < mtx3.vect.size(); i++) {
-            for (int j = 0; j < mtx3.vect[0].size(); j++) {
-                for (int k = 0; k < this->vect.size(); k++) {
-                    mtx3.vect[i][j] += this->vect[i][k] * RHSmtx.vect[k][j];
+    try {
+        if (rhs_mtx.vect.size() != this->vect.size() || rhs_mtx.vect[0].size() != this->vect[0].size()) {
+            throw "cannot add these matrices";
+        } else {
+            for (int i = 0; i < this->vect.size(); i++) {
+                for (int j = 0; j < this->vect[i].size(); j++) {
+                    this->vect[i][j] += rhs_mtx.vect[i][j];
                 }
             }
         }
-        *this = mtx3;
+        return *this;
     }
-    return *this;
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
+}
+
+//overloaded plus equals operator
+matrix &matrix::operator+=(const matrix &rhs_mtx) {
+
+    try {
+        if (rhs_mtx.vect.size() != this->vect.size() || rhs_mtx.vect[0].size() != this->vect[0].size()) {
+            throw "cannot add, matrices not equivalent";
+        } else {
+            *this = *this + rhs_mtx;
+        }
+        return *this;
+    }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
+}
+
+//overloaded minus operator
+matrix &matrix::operator-(const matrix &rhs_mtx) {
+
+    try {
+        if (rhs_mtx.vect.size() != this->vect.size() || rhs_mtx.vect[0].size() != this->vect[0].size()) {
+            throw "cannot add, matrices not equivalent";
+        } else {
+            for (int i = 0; i < this->vect.size(); i++) {
+                for (int j = 0; j < this->vect[i].size(); j++) {
+                    this->vect[i][j] -= rhs_mtx.vect[i][j];
+                }
+            }
+        }
+        return *this;
+    }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
+}
+
+//overloaded minus equals operator
+matrix &matrix::operator-=(const matrix &rhs_mtx) {
+
+    try {
+        if (rhs_mtx.vect.size() != this->vect.size() || rhs_mtx.vect[0].size() != this->vect[0].size()) {
+            throw "cannot add, matrices not equivalent";
+        } else {
+            *this = *this - rhs_mtx;
+        }
+        return *this;
+    }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
+}
+
+
+matrix &matrix::operator*=(const matrix &rhs_mtx) {
+
+    try {
+        if (this->vect[0].size() != rhs_mtx.vect.size()) {
+            throw "cannot multiply these matrices";
+        } else {
+            matrix mtx3(this->vect.size(), rhs_mtx.vect[0].size());
+            for (int i = 0; i < mtx3.vect.size(); i++) {
+                for (int j = 0; j < mtx3.vect[0].size(); j++) {
+                    for (int k = 0; k < this->vect.size(); k++) {
+                        mtx3.vect[i][j] += this->vect[i][k] * rhs_mtx.vect[k][j];
+                    }
+                }
+            }
+            *this = mtx3;
+        }
+        return *this;
+    }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
 }
 
 
 //overloaded times equal operator
-matrix operator*(matrix LHSmtx, const matrix &RHSmtx) {
+matrix operator*(matrix lhs_mtx, const matrix &rhs_mtx) {
 
-    LHSmtx *= RHSmtx;
-    return LHSmtx;
+    return lhs_mtx *= rhs_mtx;
 }
