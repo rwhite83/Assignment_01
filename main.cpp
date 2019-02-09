@@ -1,127 +1,62 @@
 #include <iostream>
 #include <fstream>
-#include "Matrix.cpp"
-#include "ConnectivityMatrix.cpp"
-#include "ConnectivityCalculations.cpp"
+#include "matrix.cpp"
+#include "connectivity_matrix.cpp"
+#include "connectivity_calculations.cpp"
 
 int main() {
 
-    vector<double> inputVectorArray1{1,2,3,4};
-    vector<double> inputVectorArray2{7,8,9,10};
+    vector<double> inputVectorArray2{4,3,2,3,4};
 
-    Matrix one(inputVectorArray1);
+    matrix matrix1(inputVectorArray2);
 
-    Matrix two(inputVectorArray2);
-    Matrix three(2,2);
-
-    cout << one << two << three << endl;
-
-    one *= two;
-
-    cout << one << endl;
-
-    //ifstream in("connectivity.txt");
-
-/*    if (!in) {
-        cout << "file not found" << endl;
-    }
-    else {
-        int value;
-        while (in >> value) {
-            inputVectorArray.push_back(value);
+    vector<double> inputVectorArray{};
+    try {
+        ifstream in("connectivity.txt");
+        if (!in) {
+            throw "file not found";
+        } else {
+            int value;
+            while (in >> value) {
+                inputVectorArray.push_back(value);
+            }
         }
     }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
 
-    ConnectivityMatrix two(inputVectorArray);*/
+    matrix one(inputVectorArray);
 
-    //cout << two;
+    cout << "base matrix: " << endl << one << endl;
 
-/*    findImportance(two);
+    findImportance(one);
 
-    cout << two;
+    matrix two = one;
+
+    cout << "find importance matrix: " << endl << two << endl;
 
     assignRandomness(two);
 
-    cout << two;
+    matrix three = two;
 
-    markovProcess(two);
+    cout << "assign randomness matrix: " << endl << three << endl;
 
-    cout << two;*/
+    markovProcess(three);
+
+    matrix four = three;
+
+    cout << endl << endl;
+
+    cout << "markov process matrix: " << endl << four << endl;
+
+    scaledRank(four);
+
+    matrix five = four;
+
+    cout << "scaled rank matrix: " << endl << five << endl;
 
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*    //matrix initialization with no parameter constructor
-    ///Matrix matrixZeroInput;
-
-    //matrix initialization with one parameter constructor
-    //populates entire matrix with the given value
-    Matrix matrixSingleInput(3);
-
-    //matrix initialization with two parameters
-    //Matrix matrixDoubleInput1(4,4);
-    //Matrix matrixDoubleInput2(4,4);
-
-    //vector array to pass in
-
-
-    //matrix initialization a vector array as its parameter
-    Matrix matrixVectorArrayInput1(inputVectorArray);
-    Matrix matrixVectorArrayInput2(inputVectorArray);
-
-    cout << matrixVectorArrayInput1;
-
-    //printing out the matrices for checking
-    //cout << matrixZeroInput << matrixSingleInput << matrixDoubleInput1 << matrixVectorArrayInput;
-
-    // sets value at target position
-    //matrixVectorArrayInput1.set_value(1, 1, 500);
-
-    //cout << matrixVectorArrayInput;
-
-    //cout << matrixVectorArrayInput.get_value(1, 1) << "\n\n" << endl ;
-
-    //matrixVectorArrayInput1.clear();
-
-    //cout << matrixVectorArrayInput;
-
-*//*
-    int x = 5;
-
-    if (matrixSingleInput == matrixVectorArrayInput1) {
-        x = 888;
-    }
-    else {
-        x = 999;
-    }
-*//*
-
-    //cout << matrixVectorArrayInput1 << endl;
-    //++matrixVectorArrayInput1;
-    //cout << matrixVectorArrayInput1 << endl;
-    //matrixVectorArrayInput1++;
-   // cout << matrixVectorArrayInput1 << endl;
-    //cout << matrixVectorArrayInput2 << endl;
-    //cout << matrixSingleInput;
-    matrixVectorArrayInput1 *= matrixVectorArrayInput1;
-    cout << matrixVectorArrayInput1;
-    matrixVectorArrayInput1 *= matrixVectorArrayInput1;
-    cout << matrixVectorArrayInput1;
-    matrixVectorArrayInput1 -= matrixVectorArrayInput1;
-    cout << matrixVectorArrayInput1;
-    //cout << matrixSingleInput;
-    //cout << matrixVectorArrayInput2 << endl;*/

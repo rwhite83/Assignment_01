@@ -2,7 +2,7 @@
 // Created by rwhit on 1/29/2019.
 //
 
-#include "Matrix.hpp"
+#include "matrix.hpp"
 #include <math.h>
 #include <iomanip>
 #include <sstream>
@@ -14,7 +14,7 @@ using namespace std;
 constexpr int defaultMatrixSize = 1;
 
 //default constructor
-Matrix::Matrix() {
+matrix::matrix() {
 
     //variable holding size of array
     int matrix_index = 1;
@@ -36,88 +36,104 @@ Matrix::Matrix() {
 }
 
 // one variable constructor
-Matrix::Matrix(int n) {
+matrix::matrix(int n) {
 
-    //guard against negative numbers and zero
-    if (n <= 0) {
-        perror("positive integers only");
-    } else {
+    try {
+        //guard against negative numbers and zero
+        if (n <= 0) {
+            throw "positive integers only";
+        } else {
 
+            //variable holding size of array
+            int matrix_index = n;
+
+            // appropriately resizing one dimension of the 2D vector
+            vect.resize(matrix_index);
+
+            // loop for populating 2D vector
+            for (int i = 0; i < matrix_index; i++) {
+                vect[i].resize(matrix_index);
+                for (int j = 0; j < matrix_index; j++) {
+                    vect[i][j] = 0.0;
+                }
+            }
+        }
+    }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
+}
+
+//two variable constructor
+matrix::matrix(int x, int y) {
+
+    try {
+        //guard against negative numbers and zero
+        if (x <= 0 || y <= 0) {
+            throw "positive integers only";
+        } else {
+
+            //variable holding size of array
+            int matrix_index_x = x;
+            int matrix_index_y = y;
+
+            // appropriately resizing one dimension of the 2D vector
+            vect.resize(x);
+
+            // loop for populating 2D vector
+            for (int i = 0; i < x; i++) {
+                vect[i].resize(y);
+                for (int j = 0; j < y; j++) {
+                    vect[i][j] = 0.0;
+                }
+            }
+        }
+    }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
+    }
+}
+
+//vector input constructor
+matrix::matrix(vector<double> thisVectorArray) {
+
+    try {
         //variable holding size of array
-        int matrix_index = n;
+        int array_size = thisVectorArray.size();
+        //variable holding square root of array
+        int matrix_index = sqrt(array_size);
+
+        //guard against non perfect square number of elements
+        double perfectSquareCheck = sqrt((double) array_size);
+        if (array_size != (matrix_index * matrix_index)) {
+            throw "must be a perfect square";
+        }
 
         // appropriately resizing one dimension of the 2D vector
         vect.resize(matrix_index);
+
+        // incrementer for iterating through the thisVectorArray vector
+        int v = 0;
 
         // loop for populating 2D vector
         for (int i = 0; i < matrix_index; i++) {
             vect[i].resize(matrix_index);
             for (int j = 0; j < matrix_index; j++) {
-                vect[i][j] = 0.0;
+                vect[i][j] = thisVectorArray[v];
+                v++;
             }
         }
     }
-}
-
-//two variable constructor
-Matrix::Matrix(int x, int y) {
-
-    //guard against negative numbers and zero
-    if (x <= 0 || y <= 0) {
-        perror("positive integers only");
-    } else {
-
-        //variable holding size of array
-        int matrix_index_x = x;
-        int matrix_index_y = y;
-
-        // appropriately resizing one dimension of the 2D vector
-        vect.resize(x);
-
-        // loop for populating 2D vector
-        for (int i = 0; i < x; i++) {
-            vect[i].resize(y);
-            for (int j = 0; j < y; j++) {
-                vect[i][j] = 0.0;
-            }
-        }
-    }
-}
-
-//vector input constructor
-Matrix::Matrix(vector<double>
-               thisVectorArray) {
-
-    //variable holding size of array
-    int array_size = thisVectorArray.size();
-    //variable holding square root of array
-    int matrix_index = sqrt(array_size);
-
-    //guard against non perfect square number of elements
-    double perfectSquareCheck = sqrt((double) array_size);
-    if (array_size != (matrix_index * matrix_index)) {
-        perror("must be a perfect square");
-        return;
-    }
-
-    // appropriately resizing one dimension of the 2D vector
-    vect.resize(matrix_index);
-
-    // incrementer for iterating through the thisVectorArray vector
-    int v = 0;
-
-    // loop for populating 2D vector
-    for (int i = 0; i < matrix_index; i++) {
-        vect[i].resize(matrix_index);
-        for (int j = 0; j < matrix_index; j++) {
-            vect[i][j] = thisVectorArray[v];
-            v++;
-        }
+    catch (const char *error_message) {
+        cerr << error_message << endl;
+        throw;
     }
 }
 
 //sets value of a particular vector position
-void Matrix::set_value(int x, int y, double value) {
+void matrix::set_value(int x, int y, double value) {
     if (x < 0 || y < 0) {
         cout << "matrix paramaters must be greater than or equal to zero" << endl;
     }
@@ -128,7 +144,7 @@ void Matrix::set_value(int x, int y, double value) {
 }
 
 //returns value of a particular vector position
-double Matrix::get_value(int x, int y) {
+double matrix::get_value(int x, int y) {
     if (x >= vect.size() || y >= vect[0].size()) {
         cout << "attempted location out of bounds of target matrix" << endl;
     }
@@ -136,7 +152,7 @@ double Matrix::get_value(int x, int y) {
 }
 
 //sets all matrix values to zero
-void Matrix::clear() {
+void matrix::clear() {
     for (int i = 0; i < vect.size(); i++) {
         for (int j = 0; j < vect[i].size(); j++) {
             vect[i][j] = 0;
@@ -145,22 +161,12 @@ void Matrix::clear() {
 }
 
 //overloaded destructor
-Matrix::~Matrix() {
+matrix::~matrix() {
     cout << "matrix destroyed" << endl;
 }
 
-/*void Matrix::printMatrix() {
-    for (int i = 0; i < vect.size(); i++) {
-        for (int j = 0; j < vect[i].size(); j++) {
-            cout << fixed << setprecision(1) << vect[i][j] << " ";
-        }
-        cout << "\n" << endl;
-    }
-    cout << endl;
-}*/
-
 //overloaded insertion operator
-ostream &operator<<(ostream &os, Matrix &mtx) {
+ostream &operator<<(ostream &os, matrix &mtx) {
     for (int i = 0; i < mtx.vect.size(); i++) {
         for (int j = 0; j < mtx.vect[i].size(); j++) {
             os << fixed << setprecision(4) << mtx.vect[i][j] << " ";
@@ -172,11 +178,11 @@ ostream &operator<<(ostream &os, Matrix &mtx) {
 }
 
 //overloaded not equals operator
-bool operator!=(Matrix& LHSmtx, Matrix& RHSmtx) {
+bool operator!=(matrix &LHSmtx, matrix &RHSmtx) {
     bool isNotEqual = false;
     for (int i = 0; i < LHSmtx.vect.size(); i++) {
         for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
-            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.01) {
+            if (abs((LHSmtx.vect[i][j] - RHSmtx.vect[i][j]) / RHSmtx.vect[i][j]) > 0.0001) {
                 isNotEqual = true;
                 return isNotEqual;
             }
@@ -185,7 +191,7 @@ bool operator!=(Matrix& LHSmtx, Matrix& RHSmtx) {
 }
 
 //overloaded is equal to operator
-bool operator==(Matrix& LHSmtx, Matrix& RHSmtx) {
+bool operator==(matrix &LHSmtx, matrix &RHSmtx) {
     bool isEqual = true;
     for (int i = 0; i < RHSmtx.vect.size(); i++) {
         for (int j = 0; j < LHSmtx.vect[i].size(); j++) {
@@ -199,7 +205,7 @@ bool operator==(Matrix& LHSmtx, Matrix& RHSmtx) {
 }
 
 //overloaded prefix incrementer operator
-Matrix& Matrix::operator++() {
+matrix &matrix::operator++() {
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             ++this->vect[i][j];
@@ -209,8 +215,8 @@ Matrix& Matrix::operator++() {
 }
 
 //overloaded postfix incrementer operator
-Matrix Matrix::operator++(int) {
-    Matrix tempMatrix(*this);
+matrix matrix::operator++(int) {
+    matrix tempMatrix(*this);
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             this->vect[i][j]++;
@@ -220,7 +226,7 @@ Matrix Matrix::operator++(int) {
 }
 
 //overloaded prefix decrementer operator
-Matrix& Matrix::operator--() {
+matrix &matrix::operator--() {
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             --this->vect[i][j];
@@ -230,8 +236,8 @@ Matrix& Matrix::operator--() {
 }
 
 //overloaded postfix decrementer operator
-Matrix Matrix::operator--(int) {
-    Matrix tempMatrix(*this);
+matrix matrix::operator--(int) {
+    matrix tempMatrix(*this);
     for (int i = 0; i < this->vect.size(); i++) {
         for (int j = 0; j < this->vect[i].size(); j++) {
             this->vect[i][j]--;
@@ -241,19 +247,19 @@ Matrix Matrix::operator--(int) {
 }
 
 //helper swap function
-void mySwap(Matrix &LHSmtx, Matrix RHSmtx) {
+void mySwap(matrix &LHSmtx, matrix RHSmtx) {
     using std::swap;
     swap(LHSmtx.vect, RHSmtx.vect);
 }
 
-//overloaded equals operator
-Matrix& Matrix::operator=(Matrix &RHSmtx) {
+//overloaded assignment operator
+matrix &matrix::operator=(const matrix &RHSmtx) {
     mySwap(*this, RHSmtx);
     return *this;
 }
 
 //overloaded addition operator
-Matrix& Matrix::operator+(const Matrix& RHSmtx) {
+matrix &matrix::operator+(const matrix &RHSmtx) {
     if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
         cout << "cannot add, matrices not equivalent" << endl;
     } else {
@@ -267,17 +273,17 @@ Matrix& Matrix::operator+(const Matrix& RHSmtx) {
 }
 
 //overloaded plus equals operator
-Matrix& Matrix::operator+=(const Matrix& RHSmtx) {
+matrix &matrix::operator+=(const matrix &RHSmtx) {
     if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
         cout << "cannot add, matrices not equivalent" << endl;
     } else {
-        *this =  *this + RHSmtx;
+        *this = *this + RHSmtx;
     }
     return *this;
 }
 
 //overloaded minus operator
-Matrix& Matrix::operator-(const Matrix &RHSmtx) {
+matrix &matrix::operator-(const matrix &RHSmtx) {
     if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
         cout << "cannot add, matrices not equivalent" << endl;
     } else {
@@ -291,7 +297,7 @@ Matrix& Matrix::operator-(const Matrix &RHSmtx) {
 }
 
 //overloaded minus equals operator
-Matrix& Matrix::operator-=(const Matrix& RHSmtx) {
+matrix &matrix::operator-=(const matrix &RHSmtx) {
     if (RHSmtx.vect.size() != this->vect.size() || RHSmtx.vect[0].size() != this->vect[0].size()) {
         cout << "cannot add, matrices not equivalent" << endl;
     } else {
@@ -301,19 +307,17 @@ Matrix& Matrix::operator-=(const Matrix& RHSmtx) {
 }
 
 
-Matrix& Matrix::operator*(const Matrix &RHSmtx) {
+matrix &matrix::operator*=(const matrix &RHSmtx) {
 
-    if (this->vect.size() != RHSmtx.vect[0].size()) {
+    if (this->vect[0].size() != RHSmtx.vect.size()) {
         cout << "cannot multiply these matrices" << endl;
     } else {
-        Matrix mtx3 (this->vect[0].size(), RHSmtx.vect.size());
-        for (int i = 0; i < mtx3.vect[0].size(); i++) {
-            for (int j = 0; j < mtx3.vect.size(); j++) {
-                double multipleMan = 0;
-                for (int k = 0; k < this->vect[0].size(); k++) {
-                    multipleMan += this->vect[k][j] * RHSmtx.vect[i][k];
+        matrix mtx3(this->vect.size(), RHSmtx.vect[0].size());
+        for (int i = 0; i < mtx3.vect.size(); i++) {
+            for (int j = 0; j < mtx3.vect[0].size(); j++) {
+                for (int k = 0; k < this->vect.size(); k++) {
+                    mtx3.vect[i][j] += this->vect[i][k] * RHSmtx.vect[k][j];
                 }
-                mtx3.vect[i][j] = multipleMan;
             }
         }
         *this = mtx3;
@@ -323,9 +327,8 @@ Matrix& Matrix::operator*(const Matrix &RHSmtx) {
 
 
 //overloaded times equal operator
-Matrix& Matrix::operator*=(const Matrix& RHSmtx) {
+matrix operator*(matrix LHSmtx, const matrix &RHSmtx) {
 
-    *this = (*this) * RHSmtx;
-
-    return *this;
+    LHSmtx *= RHSmtx;
+    return LHSmtx;
 }
