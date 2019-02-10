@@ -8,12 +8,10 @@
 #include <sstream>
 
 using namespace std;
-//using namespace matrix;
 
 //constant expressino for default matrix size
 constexpr int defaultMatrixSize = 1;
 
-//default constructor
 matrix::matrix() {
 
     //variable holding size of array
@@ -35,7 +33,6 @@ matrix::matrix() {
     }
 }
 
-// one variable constructor
 matrix::matrix(int n) {
 
     try {
@@ -65,7 +62,6 @@ matrix::matrix(int n) {
     }
 }
 
-//two variable constructor
 matrix::matrix(int x, int y) {
 
     try {
@@ -96,7 +92,6 @@ matrix::matrix(int x, int y) {
     }
 }
 
-//vector input constructor
 matrix::matrix(vector<double> this_vector_array) {
 
     try {
@@ -132,7 +127,6 @@ matrix::matrix(vector<double> this_vector_array) {
     }
 }
 
-//sets value of a particular vector position
 void matrix::set_value(int x, int y, double value) {
 
     try {
@@ -150,7 +144,6 @@ void matrix::set_value(int x, int y, double value) {
     }
 }
 
-//returns value of a particular vector position
 double matrix::get_value(int x, int y) {
 
     try {
@@ -165,7 +158,6 @@ double matrix::get_value(int x, int y) {
     }
 }
 
-//sets all matrix values to zero
 void matrix::clear() {
 
     for (int i = 0; i < vect.size(); i++) {
@@ -175,7 +167,7 @@ void matrix::clear() {
     }
 }
 
-//overloaded destructor
+
 matrix::~matrix() {
 
     /*
@@ -184,7 +176,6 @@ matrix::~matrix() {
      */
 }
 
-//overloaded insertion operator
 ostream &operator<<(ostream &os, matrix &mtx) {
 
     for (int i = 0; i < mtx.vect.size(); i++) {
@@ -197,7 +188,6 @@ ostream &operator<<(ostream &os, matrix &mtx) {
     return os;
 }
 
-//overloaded not equals operator
 bool operator!=(matrix &lhs_mtx, matrix &rhs_mtx) {
 
     bool is_not_equal = false;
@@ -211,7 +201,6 @@ bool operator!=(matrix &lhs_mtx, matrix &rhs_mtx) {
     }
 }
 
-//overloaded is equal to operator
 bool operator==(matrix &lhs_mtx, matrix &rhs_mtx) {
 
     bool is_equal = true;
@@ -226,7 +215,6 @@ bool operator==(matrix &lhs_mtx, matrix &rhs_mtx) {
     return is_equal;
 }
 
-//overloaded prefix incrementer operator
 matrix &matrix::operator++() {
 
     for (int i = 0; i < this->vect.size(); i++) {
@@ -237,7 +225,6 @@ matrix &matrix::operator++() {
     return *this;
 }
 
-//overloaded postfix incrementer operator
 matrix matrix::operator++(int) {
 
     matrix temp_matrix(*this);
@@ -249,7 +236,6 @@ matrix matrix::operator++(int) {
     return temp_matrix;
 }
 
-//overloaded prefix decrementer operator
 matrix &matrix::operator--() {
 
     for (int i = 0; i < this->vect.size(); i++) {
@@ -260,7 +246,6 @@ matrix &matrix::operator--() {
     return *this;
 }
 
-//overloaded postfix decrementer operator
 matrix matrix::operator--(int) {
 
     matrix temp_matrix(*this);
@@ -272,21 +257,18 @@ matrix matrix::operator--(int) {
     return temp_matrix;
 }
 
-//helper swap function
 void mySwap(matrix &lhs_mtx, matrix rhs_mtx) {
 
     using std::swap;
     swap(lhs_mtx.vect, rhs_mtx.vect);
 }
 
-//overloaded assignment operator
 matrix &matrix::operator=(const matrix &rhs_mtx) {
 
     mySwap(*this, rhs_mtx);
     return *this;
 }
 
-//overloaded addition operator
 matrix &matrix::operator+(const matrix &rhs_mtx) {
 
     try {
@@ -307,7 +289,6 @@ matrix &matrix::operator+(const matrix &rhs_mtx) {
     }
 }
 
-//overloaded plus equals operator
 matrix &matrix::operator+=(const matrix &rhs_mtx) {
 
     try {
@@ -324,7 +305,6 @@ matrix &matrix::operator+=(const matrix &rhs_mtx) {
     }
 }
 
-//overloaded minus operator
 matrix &matrix::operator-(const matrix &rhs_mtx) {
 
     try {
@@ -345,7 +325,6 @@ matrix &matrix::operator-(const matrix &rhs_mtx) {
     }
 }
 
-//overloaded minus equals operator
 matrix &matrix::operator-=(const matrix &rhs_mtx) {
 
     try {
@@ -361,7 +340,6 @@ matrix &matrix::operator-=(const matrix &rhs_mtx) {
         throw;
     }
 }
-
 
 matrix &matrix::operator*=(const matrix &rhs_mtx) {
 
@@ -387,8 +365,6 @@ matrix &matrix::operator*=(const matrix &rhs_mtx) {
     }
 }
 
-
-//overloaded times equal operator
 matrix operator*(matrix lhs_mtx, const matrix &rhs_mtx) {
 
     return lhs_mtx *= rhs_mtx;
